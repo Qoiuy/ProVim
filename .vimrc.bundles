@@ -1,0 +1,241 @@
+ "Vim.Plugins{{{{
+"                 _
+"        __   __ (_)  _ __ ____
+"        \ \ / / | | |  _   _  \
+"         \ V /  | | | | | | | |
+"          \_/   |_| |_| |_| |_|
+"
+" 
+" 安装插件方法
+"---------------------------------------------------------------
+"  bundle分为三类，比较常用就是第二种：
+"
+"       1.在Github vim-scripts 用户下的repos,只需要写出repos名称
+"       2.在Github其他用户下的repos, 需要写出”用户名/repos名”
+"       3.不在Github上的插件，需要写出git全路径
+"
+"  将安装的插件在~/.vimrc配置，但是我是将插件配置信息放在~/.vimrc.bundles，
+"  所以你会在我的～／.vimrc.bundles里看到我装的插件
+"
+"  插件的下载安装：
+"
+"       1. 终端输入vim，打开vim，正常模式下输入 :BundleInstall  回车
+"
+"       2.  在终端中直接运行  vim +BundleInstall +qall
+"       
+"  可以列出当前加载的所有插件：
+"      :scriptnames //list all plugins
+"      
+"""""""""""""""""""""""""""""
+"必备
+filetype off
+"set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+"}}}}
+
+
+
+
+"###############以下为插件############{{{{
+
+Plugin 'VundleVim/Vundle.vim'
+"文件树
+Plugin 'scrooloose/nerdtree'
+"C/C++自动补全插件
+Plugin 'Valloric/YouCompleteMe' 
+"python补全
+Plugin 'davidhalter/jedi-vim'
+
+"
+Plugin 'Shougo/deoplete.nvim'
+
+
+
+"java自动补全
+Plugin 'artur-shaik/vim-javacomplete2'
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+"方法分类
+Bundle 'majutsushi/tagbar' 
+
+"注视代码
+Bundle 'tpope/vim-commentary'
+
+"给文本添加“外套”
+Plugin 'tpope/vim-surround'
+
+"Markdown插件
+Bundle 'godlygeek/tabular'
+Bundle 'iamcco/mathjax-support-for-mkdp'
+Bundle 'plasticboy/vim-markdown'   
+Bundle 'suan/vim-instant-markdown'
+
+
+"airline插件
+Bundle 'vim-airline/vim-airline'
+Bundle 'vim-airline/vim-airline-themes'
+"自动补全引号(单引号/双引号/反引号), 括号(()[]{})
+Bundle 'Raimondi/delimitMate'    
+
+
+"彩虹括号
+Bundle 'luochen1990/rainbow'
+
+
+"搜索
+"模糊搜索, 可以搜索文件/buffer/mru/tag等等
+Plugin 'kien/ctrlp.vim'
+"模糊搜索当前文件中所有函数
+Plugin 'tacahiroy/ctrlp-funky'
+
+"前端插件
+Bundle 'mattn/emmet-vim'
+
+"让tab键可以飞起来
+"Plugin 'ervandew/supertab'
+
+
+
+"}}}}
+
+call vundle#end()
+
+
+" ## #############以下为插件的配置############{{{{
+
+"Nerdtree{{{
+	"autocmd vimenter * NERDTree
+	map <F3> :NERDTreeToggle<CR> "打开树状文件目录
+        
+	let NERDTreeWinPos=0 "目录位置，0:左侧，1:右侧
+	let g:NERDTreeDirArrowExpandable = '▸'
+	let g:NERDTreeDirArrowCollapsible = '▾'
+	"let NERDTreeShowLineNumbers=1 " 显示行号
+	"let NERDTreeAutoCenter=1
+	let NERDTreeShowHidden=0 " 是否显示隐藏文件
+	let NERDTreeWinSize=25 " 设置宽度
+	"let NERDTreeIgnore=['\.pyc','\~$','\.sw','\.bash*']  " 忽略一下文件的显示
+	let NERDTreeShowBookmarks=1 " 显示书签列表
+	let NERDTreeQuitOnOpen=0 "自动关闭
+	" let NERDTreeCaseSensitiveSort=1 " 让文件排列更有序
+	"let NERDTreeChDirMode=1 " 改变tree目录的同时改变工程的目录
+	let NERDTreeBookmarksFile='/Users/liyang/.vim/NERDTreeBookmarks'
+	autocmd vimenter * if !argc() | NERDTree | endif "当打开vim且没有文件时自动打开NERDTree
+	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " 只剩 NERDTree时自动关闭
+"}}}
+
+
+"YouCompleteMe{{{
+
+
+    " let g:ycm_key_invoke_completion = '<C-Space>'
+    let g:ycm_key_invoke_completion = '<tab>'
+    let g:ycm_autoclose_preview_window_after_completion=1
+    " let g:ycm_server_keep_logfiles = 1
+    " let g:ycm_server_log_level = 'debug'
+    let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+    let g:ycm_confirm_extra_conf=0
+
+    "let g:ycm_server_python_interpreter = '/Library/Frameworks/Python.framework/Versions/3.5/bin/python3'
+    "let g:ycm_python_binary_path='/usr/local/bin/python3'
+    let g:ycm_python_binary_path='/usr/local/Cellar/python3/3.6.3/Frameworks/Python.framework/Versions/3.6/bin/python3.6'
+    nnoremap <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+    let g:ycm_keep_logfiles = 1
+    let g:ycm_log_level = 'debug'
+    
+    autocmd Filetype java let g:ycm_auto_trigger=0 
+        
+"}}}
+
+"TagBar{{{
+
+    nmap <F4> :TagbarToggle<CR>
+    let g:tagbar_ctags_bin='/usr/local/bin/ctags' "设置tagbar使用的ctags的插件,必须要设置对  
+    let g:tagbar_width=24  "设置tagbar的窗口宽度  
+    let g:tagbar_left=0  "设置tagbar的窗口显示的位置
+    "autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.java,*.md,*.py call tagbar#autoopen() "打开文件自动 打开tagbar 
+
+"}}}
+
+"airline{{{
+
+    let g:airline_theme='molokai'
+
+    " 使用powerline打过补丁的字体
+    let g:airline_powerline_fonts=1
+    if !exists('g:airline_symbols')
+        let g:airline_symbols={}
+    endif
+    " 关闭空白符检测
+    let g:airline#extensions#whitespace#enabled=0
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#buffer_nr_show = 0
+    let g:airline#extensions#whitespace#symbol = '!'
+
+    let g:airline_left_sep = '⮀'
+    let g:airline_left_alt_sep = '|'
+    let g:airline_right_sep = '⮃'
+    let g:airline_right_alt_sep = '|'
+    let g:airline_symbols.linenr = '☰'
+    let g:airline_symbols.maxlinenr = ''
+
+    let g:airline_symbols.branch = ''
+    let g:airline_symbols.paste = ''
+    let g:airline_symbols.spell = ''
+    let g:airline_symbols.notexists = ''
+    let g:airline_symbols.whitespace = ''
+    let g:airline_symbols.crypt = ''
+        
+"}}}
+
+
+"rainbow{{{
+        
+    let g:rainbow_active = 1
+"}}}
+
+" ctrlp{{{
+    
+    "搜索文件，默认 Ctrl-p
+    "nmap <C-f> :CtrlP<CR>
+    "搜索Buffer
+    nmap <C-b> :CtrlPBuffer<CR>
+    "搜索最近文件
+    nmap <C-m> :CtrlPMRU<CR>   
+
+    nnoremap <Leader>u :execute 'CtrlPFunky ' . expand('<cword>')<Cr>    
+    
+    
+
+"}}}
+
+"markdown{{{
+let g:instant_markdown_slow = 1
+
+"}}}
+
+"vim-javacomplete 2{{{
+
+    let g:JavaComplete_Home = '/.vim/bundle/vim-javacomplete2'
+
+    autocmd Filetype java set omnifunc=javacomplete#Complete                       
+    autocmd Filetype java set completefunc=javacomplete#CompleteParamsInf 
+    "inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P> 
+    "inoremap <buffer> <C-S-Space> <C-X><C-U><C-P>
+    
+    let g:JavaComplete_UseFQN = 1
+    let g:JavaComplete_ServerAutoShutdownTime = 300
+    let g:JavaComplete_MavenRepositoryDisable = 0
+
+"}}}
+
+"neocomplete{{{
+let g:deoplete#enable_at_startup = 1
+""}}}
+"}}}}
+
+
+
+
